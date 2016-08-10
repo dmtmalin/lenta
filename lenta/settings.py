@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
+from kombu import Queue, Exchange
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -124,21 +125,95 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# RSS
+RSS_URL = 'https://lenta.ru/rss/news'
+RSS_GRAB_TIMEOUT = 60  # seconds
+
 # Celery [broker]
-BROKER_URL = 'redis://localhost:6379/0'
-BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.
-
-
-# Celery [periodic task]
 CELERY_TIMEZONE = 'Europe/Moscow'
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Celery [queue]
+CELERY_DEFAULT_QUEUE = 'normal'
+CELERY_QUEUES = (
+    Queue('normal', Exchange('normal'), routing_key='normal'),
+    Queue('high', Exchange('high'), routing_key='high'),
+)
+
+CELERY_ROUTES = {
+    # High priority
+    'digest.tasks.send': {'queue': 'high'},
+}
+
+# Celery [periodic tasks]
 CELERYBEAT_SCHEDULE = {
     'grab-lenta-digest': {
         'task': 'digest.tasks.grab',
-        'schedule': timedelta(seconds=1),
-        # 'args': (16, 16)
+        'schedule': timedelta(seconds=RSS_GRAB_TIMEOUT),
+        'args': (RSS_URL, )
     },
 }
 
 # Django-celery [result]
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+# Logging
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+file_handler = {
+    'class': 'logging.handlers.RotatingFileHandler',
+    'filename': os.path.join(BASE_DIR, '../app.log'),
+    'maxBytes': 1024 * 1024 * 1,  # 1 Mb
+    'backupCount': 2,
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'app_console': {
+            'class': 'logging.StreamHandler',
+        },
+        'app_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '../app.log'),
+            'maxBytes': 1024 * 1024 * 1,  # 1 Mb
+            'backupCount': 2,
+        },
+        'celery_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '../celery.log'),
+            'maxBytes': 1024 * 1024 * 1,  # 1 Mb
+            'backupCount': 2,
+        },
+        'celery_task_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '../celery.task.log'),
+            'maxBytes': 1024 * 1024 * 1,  # 1 Mb
+            'backupCount': 2,
+        },
+    },
+    'loggers': {
+        'celery': {
+            'handlers': ['celery_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'celery.task': {
+            'handlers': ['celery_task_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['app_console', 'app_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+
+    }
+}
