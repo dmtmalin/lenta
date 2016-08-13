@@ -127,6 +127,7 @@ STATIC_URL = '/static/'
 
 # RSS
 RSS_URL = 'https://lenta.ru/rss/news'
+RSS_VERSIONS_SUPPORT = ('rss20', )
 RSS_GRAB_TIMEOUT = 60  # seconds
 
 # Celery [broker]
@@ -154,7 +155,7 @@ CELERYBEAT_SCHEDULE = {
     'grab-lenta-digest': {
         'task': 'digest.tasks.grab',
         'schedule': timedelta(seconds=RSS_GRAB_TIMEOUT),
-        'args': (RSS_URL, )
+        'args': (RSS_URL, RSS_VERSIONS_SUPPORT, )
     },
 }
 

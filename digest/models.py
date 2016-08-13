@@ -5,13 +5,15 @@ import architect
 from django.core.cache import cache
 
 from django.db import models
+from django.utils.text import slugify
+from unidecode import unidecode
 
 
 class RubricQuerySet(models.QuerySet):
     def cache_get_or_create(self, key, defaults=None, **kwargs):
 
         try:
-            cache_key = kwargs[key]
+            cache_key = slugify(unidecode(kwargs[key]))
         except KeyError:
             raise AttributeError(u'Cache key not contained in transmitted model params')
 
