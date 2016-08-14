@@ -3,7 +3,7 @@
 ### Example user template
 
 # Bower components
-static/components
+src/lenta/static/components
 
 # IntelliJ project files
 .idea

@@ -18,7 +18,6 @@ from kombu import Queue, Exchange
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
-    'digest',
+    'lenta.digest',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -60,7 +59,7 @@ ROOT_URLCONF = 'lenta.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'lenta/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,7 +123,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), '')
 
 # RSS
 RSS_URL = 'https://lenta.ru/rss/news'
@@ -154,7 +152,7 @@ CELERY_ROUTES = {
 # Celery [periodic tasks]
 CELERYBEAT_SCHEDULE = {
     'grab-lenta-digest': {
-        'task': 'digest.tasks.grab',
+        'task': 'lenta.digest.tasks.grab',
         'schedule': timedelta(seconds=RSS_GRAB_TIMEOUT),
         'args': (RSS_URL, RSS_VERSIONS_SUPPORT, )
     },

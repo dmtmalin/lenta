@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 
-from digest.models import Rubric
+from lenta.digest.models import Rubric
 
 
 class SendDigestForm(forms.Form):

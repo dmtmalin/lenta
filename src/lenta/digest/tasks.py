@@ -2,16 +2,14 @@
 from __future__ import absolute_import
 
 import feedparser
-
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.core.mail.message import EmailMessage
 from django.core.serializers import deserialize
 
-from digest.models import Rubric, News
-from digest.utils import struct_time_to_datetime_tz, last_news, Report
-
-from lenta.celery import app
+from lenta.digest.models import Rubric, News
+from lenta.digest.utils import struct_time_to_datetime_tz, last_news, Report
+from lenta.celeryapp import app
 
 logger = get_task_logger(__name__)
 

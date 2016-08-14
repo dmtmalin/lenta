@@ -1,11 +1,11 @@
-from django.test import TestCase
-
-from digest.forms import SendDigestForm
-from digest.models import Rubric
-from django.core.cache import cache
 from datetime import datetime, timedelta
 
+from django.core.cache import cache
+from django.test import TestCase
 from mixer.backend.django import mixer
+
+from lenta.digest.models import Rubric
+from lenta.digest.forms import SendDigestForm
 
 
 class RubricQuerySetTestCase(TestCase):

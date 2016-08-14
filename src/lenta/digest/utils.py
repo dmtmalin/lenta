@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-import trml2pdf
-
-from time import mktime
+import os
 from datetime import datetime
+from time import mktime
 
+import trml2pdf
 from django.template.loader import get_template
 from django.templatetags.static import static
 from django.utils.timezone import make_aware
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-from digest.models import News
+from lenta.digest.models import News
 from django.conf import settings
-
-from lenta import settings
 
 
 def struct_time_to_datetime(time):
@@ -37,8 +35,9 @@ class Report(object):
     def __new__(cls):
         if Report.__instance is None:
             Report.__instance = object.__new__(cls)
-            font = ''.join((settings.BASE_DIR, static('lenta/fonts/DejaVuSans.ttf'),))
-            bold_font = ''.join((settings.BASE_DIR, static('lenta/fonts/DejaVuSans-Bold.ttf'),))
+            base_dir = os.path.join(settings.BASE_DIR, 'lenta')
+            font = ''.join((base_dir, static('lenta/fonts/DejaVuSans.ttf'),))
+            bold_font = ''.join((base_dir, static('lenta/fonts/DejaVuSans-Bold.ttf'),))
             pdfmetrics.registerFont(TTFont('DejaVuSans', font, 'utf-8'))
             pdfmetrics.registerFont(TTFont('DejaVuSans-Bold', bold_font, 'utf-8'))
         return Report.__instance

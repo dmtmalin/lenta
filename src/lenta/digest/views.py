@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.serializers import serialize
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView
 
-from digest.forms import SendDigestForm
-from django.contrib.messages.views import SuccessMessageMixin
-
-from digest.models import News
-from digest.tasks import send
+from lenta.digest.forms import SendDigestForm
+from lenta.digest.models import News
+from lenta.digest.tasks import send
 
 
 class SendDigestView(SuccessMessageMixin, FormView):

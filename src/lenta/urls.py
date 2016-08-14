@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import RedirectView
 
-from digest.views import SendDigestView
+from lenta.digest.views import SendDigestView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
