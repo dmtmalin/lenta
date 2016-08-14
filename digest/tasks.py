@@ -5,16 +5,20 @@ import feedparser
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from django.core.mail.message import EmailMessage
+from django.core.serializers import deserialize
 
 from digest.models import Rubric, News
-from digest.utils import struct_time_to_datetime_tz, last_news
+from digest.utils import struct_time_to_datetime_tz, last_news, Report
+
+from lenta.celery import app
 
 logger = get_task_logger(__name__)
 
 
 @shared_task
 def grab(url, versions_support):
-    logger.info(u'Start grab  from %s' % (url, ))
+    logger.info(u'Start grab task from %s' % (url, ))
 
     rss = feedparser.parse(url)
 
@@ -36,6 +40,16 @@ def grab(url, versions_support):
     logger.info(u'Grab success finished')
 
 
-@shared_task
-def send():
-    logger.info("Start send")
+@app.task
+def send(serialize_news, email):
+    logger.info(u'Start send task')
+    news = [item.object for item in deserialize('json', serialize_news)]
+
+    logger.info(u'Generate report')
+    pdf = Report().generate(news)
+
+    logger.info(u'Send report to %s', (email, ))
+    mail = EmailMessage(subject='Digest news', to=(email, ))
+    mail.attach('report.pdf', pdf, 'application/pdf')
+    mail.send(fail_silently=False)
+    logger.info(u'Send success finished')

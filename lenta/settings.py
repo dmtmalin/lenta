@@ -164,6 +164,13 @@ CELERYBEAT_SCHEDULE = {
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
+# Email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dmt.malin@gmail.com'
+EMAIL_HOST_PASSWORD = '*******'
+
 # Logging
 CELERYD_HIJACK_ROOT_LOGGER = False
 
