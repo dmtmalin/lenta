@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.base import RedirectView
+
+from digest.views import SendDigestView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', RedirectView.as_view(url=reverse_lazy('send-digest-view')), name='home-view'),
+    url(r'^send-digest/$', SendDigestView.as_view(), name='send-digest-view'),
 ]

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Дайджест новостей{% endblock %}
+
+{% block content %}
+<div class="col-md-4">
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group {% if form.begin.errors %}has-error{% endif %}">
+      <label>Интервал</label>
+      <div class="input-group date" id="begin_date">
+        <input id="{{ form.begin.id_for_label }}" name="{{ form.begin.name }}" class="form-control" type="text" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+        </span>
+      </div>
+      {% for error in form.begin.errors%}
+        <span class="help-block">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group {% if form.final.errors %}has-error{% endif %}">
+      <div class="input-group date" id="final_date">
+        <input id="{{ form.final.id_for_label }}" name="{{ form.final.name }}" class="form-control" type="text" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+        </span>
+      </div>
+      {% for error in form.final.errors%}
+        <span class="help-block">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group {% if form.rubric.errors %}has-error{% endif %}">
+      <label for="{{ form.rubric.id_for_label }}">{{ form.rubric.label }}</label>
+      <select id="{{ form.rubric.id_for_label }}" name="{{ form.rubric.name }}" class="form-control">
+        {% for value, item in form.rubric.field.choices %}
+          <option value="{{ value }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+      {% for error in form.rubric.errors%}
+        <span class="help-block">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+      <input id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" class="form-control" type="email" />
+      {% for error in form.email.errors %}
+        <span class="help-block">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+
+    {% for error in form.non_field_errors %}
+      <p class="text-danger">{{ error }}</p>
+    {% endfor %}
+
+
+    {% if messages %}
+      {% for message in messages %}
+       <p class="text-success">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <button type="submit" class="btn btn-success pull-right">Отправить</button>
+  </form>
+</div>
+{% endblock %}
