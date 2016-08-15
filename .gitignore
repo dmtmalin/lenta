@@ -2,6 +2,9 @@
 ### Example user template template
 ### Example user template
 
+# Bower components
+src/lenta/static/components
+
 # IntelliJ project files
 .idea
 *.iml

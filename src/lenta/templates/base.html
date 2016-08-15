@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'components/bootstrap/dist/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'lenta/css/theme.css' %}">
+  <script src="{% static 'components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'components/moment/min/moment.min.js' %}"></script>
+  <script src="{% static 'components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+  <script src="{% static 'lenta/js/main.js' %}"></script>
+  {% block head %}{% endblock head %}
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{% url "send-digest-view" %}">Дайджест новостей</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="content-container" role="main">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>
