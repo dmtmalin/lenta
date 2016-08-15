@@ -35,9 +35,8 @@ class Report(object):
     def __new__(cls):
         if Report.__instance is None:
             Report.__instance = object.__new__(cls)
-            base_dir = os.path.join(settings.BASE_DIR, 'lenta')
-            font = ''.join((base_dir, static('lenta/fonts/DejaVuSans.ttf'),))
-            bold_font = ''.join((base_dir, static('lenta/fonts/DejaVuSans-Bold.ttf'),))
+            font = ''.join((settings.BASE_DIR, static('lenta/fonts/DejaVuSans.ttf'),))
+            bold_font = ''.join((settings.BASE_DIR, static('lenta/fonts/DejaVuSans-Bold.ttf'),))
             pdfmetrics.registerFont(TTFont('DejaVuSans', font, 'utf-8'))
             pdfmetrics.registerFont(TTFont('DejaVuSans-Bold', bold_font, 'utf-8'))
         return Report.__instance

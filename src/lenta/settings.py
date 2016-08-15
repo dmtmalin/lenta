@@ -16,7 +16,7 @@ from datetime import timedelta
 from kombu import Queue, Exchange
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
+    'lenta',
     'lenta.digest',
 ]
 
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'lenta.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'lenta/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -174,7 +175,7 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 file_handler = {
     'class': 'logging.handlers.RotatingFileHandler',
-    'filename': os.path.join(BASE_DIR, '../app.log'),
+    'filename': os.path.join(BASE_DIR, '../../app.log'),
     'maxBytes': 1024 * 1024 * 1,  # 1 Mb
     'backupCount': 2,
 }
@@ -188,19 +189,19 @@ LOGGING = {
         },
         'app_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../app.log'),
+            'filename': os.path.join(BASE_DIR, '../../app.log'),
             'maxBytes': 1024 * 1024 * 1,  # 1 Mb
             'backupCount': 2,
         },
         'celery_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../celery.log'),
+            'filename': os.path.join(BASE_DIR, '../../celery.log'),
             'maxBytes': 1024 * 1024 * 1,  # 1 Mb
             'backupCount': 2,
         },
         'celery_task_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../celery.task.log'),
+            'filename': os.path.join(BASE_DIR, '../../celery.task.log'),
             'maxBytes': 1024 * 1024 * 1,  # 1 Mb
             'backupCount': 2,
         },
